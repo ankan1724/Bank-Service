@@ -1,0 +1,14 @@
+server:
+  port: 12513
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    driver-class-name:  oracle.jdbc.OracleDriver
+    username: sys as sysdba
+    password: ankan
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
