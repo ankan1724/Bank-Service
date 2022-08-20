@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.ExceptionHandlers.CustomUserException;
+import com.example.ExceptionHandlers.SignUpException;
 import com.example.Model.Users;
 import com.example.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @RestController
@@ -26,17 +28,20 @@ public class UserController {
     public String   addUsers( @RequestParam String email,
                            @RequestParam String password,
                            @RequestParam String permissions,
-                           @RequestParam boolean acc_active){
-        Users users=new Users();
-        users.setUserId(UUID.randomUUID().toString());
-        users.setEmail(email);
-        users.setPassword(passwordEncoder().encode(password));
-        users.setPermissions(permissions);
-        users.setAcc_active(acc_active);
-        this.userRepository.save(users);
-        return "user created successfully";
+                           @RequestParam boolean acc_active) throws RuntimeException {
+        try {
+            Users users = new Users();
+            users.setUserId(UUID.randomUUID().toString());
+            users.setEmail(email);
+            users.setPassword(passwordEncoder().encode(password));
+            users.setPermissions(permissions.toUpperCase(Locale.ROOT));
+            users.setAcc_active(acc_active);
+            this.userRepository.save(users);
+            return "user created successfully";
+        } catch (RuntimeException runtimeException) {
+            throw new SignUpException("Email", email,"Password",password);
+        }
     }
-    
     @PutMapping("/update")
     public String   enableUser(@RequestParam String email) throws  RuntimeException{
       List<Users> users= this.userRepository.findByEmail(email);

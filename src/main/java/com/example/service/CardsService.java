@@ -22,21 +22,24 @@ public class CardsService {
     private CustomerRepo customerRepo;
 
     public Cards addCards(Long acc_number, Long cardNumber, CardType cardType, double limits, double used) {
-        Cards cards = new Cards();
-        cards.setCardNumber(cardNumber);
-        cards.setCardType(cardType);
-        Optional<Customer_model> optional_customer_model = customerRepo.findById(acc_number);
-        Customer_model customer_model = optional_customer_model.get();
-        cards.setCustomer_model(customer_model);
-        if (cards.getCardType() == CardType.CREDIT) {
-            cards.setLimits(limits);
-            cards.setUsed(used);
-        } else {
-            cards.setLimits(0.0);
-            cards.setUsed(0.0);
+        
+            Cards cards = new Cards();
+            cards.setCardNumber(cardNumber);
+            cards.setCardType(cardType);
+            Optional<Customer_model> optional_customer_model = customerRepo.findById(acc_number);
+            Customer_model customer_model = optional_customer_model.get();
+            cards.setCustomer_model(customer_model);
+            if (cards.getCardType() == CardType.CREDIT) {
+                cards.setLimits(limits);
+                cards.setUsed(used);
+            } else {
+                cards.setLimits(0.0);
+                cards.setUsed(0.0);
+            }
+            return this.cardsRepo.save(cards);
+       
         }
-        return this.cardsRepo.save(cards);
-    }
+    
 
     public Set<Cards> showCardsbyaccNumber(Long acc_number) throws RuntimeException {
         Optional<Customer_model> optional_customer_model = customerRepo.findById(acc_number);

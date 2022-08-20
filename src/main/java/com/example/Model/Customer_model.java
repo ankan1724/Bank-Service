@@ -32,6 +32,5 @@ public class Customer_model {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Cards> cards    =    new HashSet<>();
-   
+    private Set<Cards> cards ;
 }

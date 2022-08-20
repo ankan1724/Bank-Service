@@ -21,7 +21,7 @@ public class CustomerController {
     
     @PostMapping("/add")
     @ApiOperation("to add a new customer")
-    @PreAuthorize("hasPermission('ADMIN'')")
+    @PreAuthorize("hasPermission('READ')")
     public String newCustomer(@Valid @RequestParam(value = "acc_holder",required = true) String acc_holder,
                               @RequestParam(value = "address",required = true)String address,
                               @RequestParam(value = "pincode",required = true)long pincode,
@@ -33,28 +33,31 @@ public class CustomerController {
 
     @GetMapping("/getById")
     @ApiOperation("to get customer details by Acc_Number")
+    @PreAuthorize("hasPermission('WRITE')")
     public Optional<Customer_model> getCustomerByAcc_Number(@Valid@RequestParam(name="acc_number", required = true)Long acc_number){
         return this.customerService.getcustomerbyid(acc_number);
 }
     @GetMapping("/all")
     @ApiOperation("to get list of Customers")
-    @PreAuthorize("hasPermission('ADMIN'')")
+    @PreAuthorize("hasPermission('WRITE')")
 public List<Customer_model>  getAllCustomer(){
     return   this.customerService.getAllCustomer();
 }
 
 
-    /*@DeleteMapping("/deleteByid")
+    @DeleteMapping("/deleteByid")
     @ApiOperation("to delete ")
+    @PreAuthorize("hasPermission('WRITE')")
     public String deleteCustomer(@RequestParam(name="acc_number", required = true)Long acc_number){
         this.customerService.deleteCustomer(acc_number);
         return "customer details removed";
     }
     
     @PutMapping("/updateById")
-    @ApiOperation("to update kyc of existing customer")
-    public Customer_model updateKyc(@RequestParam(value = "acc_number", required = true) Long acc_number,
-                                    @RequestBody Customer_model customer_model){
-        return this.customerService.updateKyc(acc_number,customer_model);
-    }*/
+    @ApiOperation("to update address of existing customer")
+    @PreAuthorize("hasPermission('WRITE')")
+    public Customer_model updateAddressDetails(@RequestParam(value = "acc_number", required = true) Long acc_number,
+                                                                                          @RequestParam(value = "acc_number", required = true) String  address  ){
+        return this.customerService.updateAddressDetails(acc_number,address);
+    }
 }

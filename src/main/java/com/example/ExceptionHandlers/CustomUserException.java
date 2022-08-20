@@ -8,9 +8,10 @@ public class CustomUserException extends RuntimeException{
     private String resourceName;
     private String fieldName;
     private String  fieldValue;
+    private final  static String errorMessage=      "%s with %s : '%s' doesn't exists, please signUp or check email or password again";
 
     public CustomUserException(String resourceName, String fieldName, String  fieldValue) {
-        super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue)); 
+        super(String.format( errorMessage,resourceName, fieldName, fieldValue)); 
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;

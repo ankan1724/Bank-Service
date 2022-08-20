@@ -18,7 +18,7 @@ public class CustomerService {
     private CustomerRepo customerRepo;
     @Autowired
     private CardsRepo cardsRepo;
- 
+
 
     public String newCustomer(String acc_holder, String address, long pincode, Type acc_type) {
         Customer_model customer_model = new Customer_model();
@@ -33,16 +33,36 @@ public class CustomerService {
         return "new account created";
     }
 
-    public Optional<Customer_model> getcustomerbyid(Long  acc_number)throws RuntimeException{
-      Optional<Customer_model> customer_model=this.customerRepo.findById(acc_number)  ;
-      if(!customer_model.isPresent()){
-          throw   new CustomerException("Customer","Account number", acc_number);
-      }else {
-          return  customer_model;
-      }
+    public Optional<Customer_model> getcustomerbyid(Long acc_number) throws RuntimeException {
+        Optional<Customer_model> customer_model = this.customerRepo.findById(acc_number);
+        if (!customer_model.isPresent()) {
+            throw new CustomerException("Customer", "Account number", acc_number);
+        } else {
+            return customer_model;
+        }
     }
-   
+
     public List<Customer_model> getAllCustomer() {
         return this.customerRepo.findAll();
+    }
+
+    public String deleteCustomer(Long acc_number) {
+        Optional<Customer_model> customer_model1 = this.customerRepo.findById(acc_number);
+        if (!customer_model1.isPresent()) {
+            throw new CustomerException("Customer","Account Number",acc_number);
+        }
+        this.customerRepo.deleteById(acc_number);
+        return "Customer removed ";
+    }
+
+    public Customer_model updateAddressDetails(Long acc_number, String address) throws RuntimeException{
+        Optional<Customer_model> customer_model1 = this.customerRepo.findById(acc_number);
+        if (!customer_model1.isPresent()) {
+throw new CustomerException("Customer","Account Number",acc_number);
+        }
+        Customer_model customer = customer_model1.get();
+        customer.setAddress(address);
+        customerRepo.save(customer);
+        return customer;
     }
 }
